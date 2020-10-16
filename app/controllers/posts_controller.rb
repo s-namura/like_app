@@ -23,12 +23,20 @@ class PostsController < ApplicationController
   end
 
   def destroy
+    post = Post.find(params[:id])
+    post.destroy!
+    redirect_to root_path
   end
 
   private
 
   def post_params
     params.require(:post).permit(:content)
+  end
+
+  def set_post
+    @post = current_user.posts.find_by(id: params[:id])
+    redirect_to root_path, alert: "権限がありません"
   end
 
 end
