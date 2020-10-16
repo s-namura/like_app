@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  before_action :set_post, only: %i[edit update destroy]
+
   def index
     @posts = Post.order(:id).includes(:user)
   end
@@ -20,6 +22,8 @@ class PostsController < ApplicationController
   end
 
   def update
+    @post.update!(post_params)
+    redirect_to @post
   end
 
   def destroy
@@ -35,8 +39,9 @@ class PostsController < ApplicationController
   end
 
   def set_post
-    @post = current_user.posts.find_by(id: params[:id])
-    redirect_to root_path, alert: "権限がありません"
+    @post = current_user.posts.find(params[:id])
+    # @post = current_user.posts.find_by(id: params[:id])
+    # redirect_to root_path, alert: "権限がありません"
   end
 
 end
